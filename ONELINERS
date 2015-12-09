@@ -1,0 +1,5 @@
+# General stack profile
+dtrace -x stackframes=100 -n 'profile-1000hz { @[stack()] = count(); } tick-5s { exit(0); }' -o out.frames
+
+# Get all traces for zfs_freebsd_readdir
+dtrace -x stackframes=100 -n 'fbt::zfs_freebsd_readdir:entry { @[stack()] = count(); } tick-5s { exit(0); }' -o readdir.frames
