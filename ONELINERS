@@ -3,3 +3,9 @@ dtrace -x stackframes=100 -n 'profile-1000hz { @[stack()] = count(); } tick-5s {
 
 # Get all traces for zfs_freebsd_readdir
 dtrace -x stackframes=100 -n 'fbt::zfs_freebsd_readdir:entry { @[stack()] = count(); } tick-5s { exit(0); }' -o readdir.frames
+
+# Overview of the most zfs calls
+dtrace -n '::zfs_freebsd_*:entry { @[probefunc] = count(); } tick-5s { exit(0); }'
+
+# Which files are being stat on zfs, variants with lstat and fstat also possible for example
+dtrace -n 'syscall:freebsd:stat:entry { printf("%s", copyinstr((uintptr_t) args[0])); }'
